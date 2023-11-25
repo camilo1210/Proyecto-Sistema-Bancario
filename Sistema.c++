@@ -6,11 +6,13 @@
 |Samuel Ospina
 
 *******************************************************************************/
+
 #include <iostream>
 #include <vector>
 #include <cstring>
+
 using namespace std;
-//Probando 123
+
 class class_abrir_cuenta {
 public:
     class_abrir_cuenta();
