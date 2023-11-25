@@ -2,7 +2,7 @@
 #include <vector>
 #include <cstring>
 using namespace std;
-
+// Hola como están?
 class class_abrir_cuenta {
 public:
     class_abrir_cuenta();
