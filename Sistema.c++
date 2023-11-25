@@ -13,6 +13,19 @@
 
 using namespace std;
 
+class ServicioCliente {
+public:
+    void mostrarInformacionBanco() const {
+        cout << "----- Información de Servicio al Cliente -----\n";
+        cout << "Número telefónico del banco: 1502206\n";
+        cout << "Número celular del banco: 3182260316\n";
+        cout << "Correo del banco: apoyocliente@hotmail.com\n";
+        cout << "Dirección del banco: Carrera 5 #12-17 Piso 5.\n";
+        cout << "Horarios de atención: Lunes a Viernes de 9 AM a 5 PM\n";
+        cout << "----------------------------------------------\n";
+    }
+};
+
 class class_abrir_cuenta {
 public:
     class_abrir_cuenta();
@@ -141,6 +154,7 @@ public:
 
 private:
     vector<class_abrir_cuenta> cuentas;
+    ServicioCliente servicioCliente;
 };
 
 void GestorCuentas::ejecutarMenu() {
@@ -150,6 +164,7 @@ void GestorCuentas::ejecutarMenu() {
         cout << "1) Crea una cuenta\n";
         cout << "2) Mostrar información de la cuenta\n";
         cout << "3) Cerrar una cuenta\n";
+        cout << "4) Servicio al Cliente\n";
         cout << "0) Salir\n";
         cin >> ch;
 
@@ -207,6 +222,10 @@ void GestorCuentas::ejecutarMenu() {
 
                 break;
             }
+          case 4:
+          }
+           servicioCliente.mostrarInformacionBanco();
+           break;
         }
     } while (ch != 0);
 }
