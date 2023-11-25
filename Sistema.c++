@@ -32,6 +32,8 @@ public:
     void met_abrir_cuenta();
     int obtener_numero_cuenta() const;
     const char* obtener_contrasena() const;
+    float obtener_saldo() const;
+    void cambiar_contrasena();
 
 public:
     static int atr_contador_cuentas;
@@ -42,12 +44,14 @@ public:
     char atr_edad[100];
     string atr_motivo;
     char atr_contrasena[100];
+    float saldo;
 };
 
 int class_abrir_cuenta::atr_contador_cuentas = 1;
 
 class_abrir_cuenta::class_abrir_cuenta() {
     atr_numero_cuenta = atr_contador_cuentas++;
+    saldo = 0.0;
 }
 
 void class_abrir_cuenta::met_abrir_cuenta() {
@@ -85,6 +89,19 @@ const char* class_abrir_cuenta::obtener_contrasena() const {
     return atr_contrasena;
 }
 
+float class_abrir_cuenta::obtener_saldo() const {
+    return saldo;
+}
+
+void class_abrir_cuenta::cambiar_contrasena() {
+    char nuevaContrasena[100];
+    cout << "Ingrese la nueva contraseña: ";
+    cin.ignore();
+    cin.getline(nuevaContrasena, 100);
+    strcpy(atr_contrasena, nuevaContrasena);
+    cout << "Contraseña cambiada exitosamente.\n";
+}
+
 class class_mostrar_cuenta {
 public:
     class_mostrar_cuenta(const class_abrir_cuenta &var_cuenta);
@@ -99,6 +116,7 @@ class_mostrar_cuenta::class_mostrar_cuenta(const class_abrir_cuenta &var_cuenta)
 void class_mostrar_cuenta::mostrar_datos_cuenta() const {
     cout << "Nombre: " << var_cuenta.atr_nombre_completo << endl;
     cout << "Número de cuenta: " << var_cuenta.obtener_numero_cuenta() << endl;
+    cout << "Saldo: $" << var_cuenta.obtener_saldo() << endl;
 }
 
 class class_cerrar_cuenta {
@@ -135,17 +153,51 @@ void class_cerrar_cuenta::cerrar_cuenta() {
     cout << "Ingrese el motivo por el cual quiere cerrar la cuenta: ";
     cin >> motivo;
 
-    // Verificar si la información ingresada coincide con la cuenta a cerrar
     if (numeroCuenta == cuenta_a_cerrar.obtener_numero_cuenta() &&
         strcmp(contrasena, cuenta_a_cerrar.obtener_contrasena()) == 0 &&
         strcmp(numeroIdentificacion, cuenta_a_cerrar.atr_numero_identificacion) == 0 &&
         strcmp(nombre, cuenta_a_cerrar.atr_nombre_completo) == 0 &&
         motivo == cuenta_a_cerrar.atr_motivo) {
         cout << "Cuenta cerrada exitosamente.\n";
-        // Aquí podrías realizar otras acciones, como eliminar la cuenta del vector.
     } else {
         cout << "Error al cerrar la cuenta. La información ingresada no coincide con la cuenta.\n";
     }
+}
+
+class OperacionesBancarias {
+public:
+    static void depositarDinero(class_abrir_cuenta &cuenta, float monto);
+    static void retirarDinero(class_abrir_cuenta &cuenta, float monto);
+    static void transferirDinero(class_abrir_cuenta &cuentaOrigen, class_abrir_cuenta &cuentaDestino, float monto);
+    static void consultarSaldo(const class_abrir_cuenta &cuenta);
+};
+
+void OperacionesBancarias::depositarDinero(class_abrir_cuenta &cuenta, float monto) {
+    cuenta.saldo += monto;
+    cout << "Depósito exitoso. Nuevo saldo: $" << cuenta.obtener_saldo() << endl;
+}
+
+void OperacionesBancarias::retirarDinero(class_abrir_cuenta &cuenta, float monto) {
+    if (monto <= cuenta.saldo) {
+        cuenta.saldo -= monto;
+        cout << "Retiro exitoso. Nuevo saldo: $" << cuenta.obtener_saldo() << endl;
+    } else {
+        cout << "Saldo insuficiente para realizar el retiro.\n";
+    }
+}
+
+void OperacionesBancarias::transferirDinero(class_abrir_cuenta &cuentaOrigen, class_abrir_cuenta &cuentaDestino, float monto) {
+    if (monto <= cuentaOrigen.saldo) {
+        cuentaOrigen.saldo -= monto;
+        cuentaDestino.saldo += monto;
+        cout << "Transferencia exitosa. Nuevo saldo de la cuenta origen: $" << cuentaOrigen.obtener_saldo() << endl;
+    } else {
+        cout << "Saldo insuficiente para realizar la transferencia.\n";
+    }
+}
+
+void OperacionesBancarias::consultarSaldo(const class_abrir_cuenta &cuenta) {
+    cout << "Saldo actual de la cuenta: $" << cuenta.obtener_saldo() << endl;
 }
 
 class GestorCuentas {
@@ -164,7 +216,8 @@ void GestorCuentas::ejecutarMenu() {
         cout << "1) Crea una cuenta\n";
         cout << "2) Mostrar información de la cuenta\n";
         cout << "3) Cerrar una cuenta\n";
-        cout << "4) Servicio al Cliente\n";
+        cout << "4) Operaciones Bancarias\n";
+        cout << "5) Servicio al Cliente\n";
         cout << "0) Salir\n";
         cin >> ch;
 
@@ -182,7 +235,6 @@ void GestorCuentas::ejecutarMenu() {
                 cout << "Ingrese el número de cuenta: ";
                 cin >> numeroCuenta;
 
-                // Buscar la cuenta por número de cuenta
                 bool cuentaEncontrada = false;
                 for (const auto &cuenta : cuentas) {
                     if (cuenta.obtener_numero_cuenta() == numeroCuenta) {
@@ -205,7 +257,6 @@ void GestorCuentas::ejecutarMenu() {
                 cout << "Ingrese el número de cuenta a cerrar: ";
                 cin >> numeroCuenta;
 
-                // Buscar la cuenta por número de cuenta
                 bool cuentaEncontrada = false;
                 for (const auto &cuenta : cuentas) {
                     if (cuenta.obtener_numero_cuenta() == numeroCuenta) {
@@ -222,10 +273,100 @@ void GestorCuentas::ejecutarMenu() {
 
                 break;
             }
-          case 4:
-          }
-           servicioCliente.mostrarInformacionBanco();
-           break;
+        case 4:
+            {
+                int opcionOperacion;
+                cout << "1) Depositar Dinero\n";
+                cout << "2) Retirar Dinero\n";
+                cout << "3) Transferir Dinero\n";
+                cout << "4) Consultar Saldo\n";
+                cout << "5) Cambiar Contraseña\n";
+                cout << "0) Volver al Menú Principal\n";
+                cin >> opcionOperacion;
+
+                int numeroCuenta;
+                cout << "Ingrese el número de cuenta: ";
+                cin >> numeroCuenta;
+
+                bool cuentaEncontrada = false;
+                for (auto &cuenta : cuentas) {
+                    if (cuenta.obtener_numero_cuenta() == numeroCuenta) {
+                        cuentaEncontrada = true;
+
+                        switch (opcionOperacion) {
+                        case 1:
+                            {
+                                float monto;
+                                cout << "Ingrese el monto a depositar: $";
+                                cin >> monto;
+                                OperacionesBancarias::depositarDinero(cuenta, monto);
+                                break;
+                            }
+                        case 2:
+                            {
+                                float monto;
+                                cout << "Ingrese el monto a retirar: $";
+                                cin >> monto;
+                                OperacionesBancarias::retirarDinero(cuenta, monto);
+                                break;
+                            }
+                        case 3:
+                            {
+                                int numeroCuentaDestino;
+                                cout << "Ingrese el número de cuenta destino: ";
+                                cin >> numeroCuentaDestino;
+
+                                bool cuentaDestinoEncontrada = false;
+                                for (auto &cuentaDestino : cuentas) {
+                                    if (cuentaDestino.obtener_numero_cuenta() == numeroCuentaDestino) {
+                                        cuentaDestinoEncontrada = true;
+                                        float monto;
+                                        cout << "Ingrese el monto a transferir: $";
+                                        cin >> monto;
+                                        OperacionesBancarias::transferirDinero(cuenta, cuentaDestino, monto);
+                                        break;
+                                    }
+                                }
+
+                                if (!cuentaDestinoEncontrada) {
+                                    cout << "Cuenta destino no encontrada.\n";
+                                }
+
+                                break;
+                            }
+                        case 4:
+                            OperacionesBancarias::consultarSaldo(cuenta);
+                            break;
+                        case 5:
+                            cuenta.cambiar_contrasena();
+                            break;
+                        case 0:
+                            // No se realiza ninguna operación, simplemente se vuelve al menú principal
+                            break;
+                        default:
+                            cout << "Opción no válida.\n";
+                            break;
+                        }
+
+                        break;
+                    }
+                }
+
+                if (!cuentaEncontrada) {
+                    cout << "Cuenta no encontrada.\n";
+                }
+
+                break;
+            }
+        case 5:
+            servicioCliente.mostrarInformacionBanco();
+            break;
+        case 0:
+            cout << "Saliendo del programa...\n";
+            break;
+        default:
+            cout << "Opción no válida.\n";
+            break;
         }
     } while (ch != 0);
 }
