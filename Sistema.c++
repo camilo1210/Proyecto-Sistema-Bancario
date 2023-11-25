@@ -1,3 +1,11 @@
+/******************************************************************************
+
+                     Proyecto De Programación Orientada a Objetos
+|Andrik Buitrago 
+|Camilo Pavas 
+|Samuel Ospina
+
+*******************************************************************************/
 #include <iostream>
 #include <vector>
 #include <cstring>
