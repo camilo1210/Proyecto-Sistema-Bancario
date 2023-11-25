@@ -7,11 +7,13 @@
 
 *******************************************************************************/
 
+//======================================================================
 #include <iostream>
 #include <vector>
 #include <cstring>
-
 using namespace std;
+//======================================================================
+// Clase para abrir una cuenta bancaria
 
 class ServicioCliente {
 public:
@@ -25,6 +27,8 @@ public:
         cout << "----------------------------------------------\n";
     }
 };
+//======================================================================
+// Clase para abrir una cuenta bancaria
 
 class class_abrir_cuenta {
 public:
@@ -47,13 +51,16 @@ public:
     float saldo;
 };
 
+// Inicialización del contador de cuentas
 int class_abrir_cuenta::atr_contador_cuentas = 1;
 
+// Constructor de la clase abrir_cuenta
 class_abrir_cuenta::class_abrir_cuenta() {
     atr_numero_cuenta = atr_contador_cuentas++;
     saldo = 0.0;
 }
 
+// Método para abrir una cuenta
 void class_abrir_cuenta::met_abrir_cuenta() {
     cout << "Ingresa tu nombre completo: ";
     cin.ignore();
@@ -81,18 +88,22 @@ void class_abrir_cuenta::met_abrir_cuenta() {
     cout << "Su cuenta ha sido creada con éxito." << endl;
 }
 
+// Método para obtener el número de cuenta
 int class_abrir_cuenta::obtener_numero_cuenta() const {
     return atr_numero_cuenta;
 }
 
+// Método para obtener la contraseña
 const char* class_abrir_cuenta::obtener_contrasena() const {
     return atr_contrasena;
 }
 
+// Método para obtener el saldo
 float class_abrir_cuenta::obtener_saldo() const {
     return saldo;
 }
 
+// Método para cambiar la contraseña
 void class_abrir_cuenta::cambiar_contrasena() {
     char nuevaContrasena[100];
     cout << "Ingrese la nueva contraseña: ";
@@ -102,6 +113,8 @@ void class_abrir_cuenta::cambiar_contrasena() {
     cout << "Contraseña cambiada exitosamente.\n";
 }
 
+//======================================================================
+// Clase para mostrar los datos de una cuenta
 class class_mostrar_cuenta {
 public:
     class_mostrar_cuenta(const class_abrir_cuenta &var_cuenta);
@@ -111,14 +124,18 @@ private:
     const class_abrir_cuenta &var_cuenta;
 };
 
+// Constructor de la clase mostrar_cuenta
 class_mostrar_cuenta::class_mostrar_cuenta(const class_abrir_cuenta &var_cuenta) : var_cuenta(var_cuenta) {}
 
+// Método para mostrar los datos de una cuenta
 void class_mostrar_cuenta::mostrar_datos_cuenta() const {
     cout << "Nombre: " << var_cuenta.atr_nombre_completo << endl;
     cout << "Número de cuenta: " << var_cuenta.obtener_numero_cuenta() << endl;
     cout << "Saldo: $" << var_cuenta.obtener_saldo() << endl;
 }
 
+//======================================================================
+// Clase para cerrar una cuenta
 class class_cerrar_cuenta {
 public:
     class_cerrar_cuenta(const class_abrir_cuenta &cuenta);
@@ -128,8 +145,10 @@ private:
     const class_abrir_cuenta &cuenta_a_cerrar;
 };
 
+// Constructor de la clase cerrar_cuenta
 class_cerrar_cuenta::class_cerrar_cuenta(const class_abrir_cuenta &cuenta) : cuenta_a_cerrar(cuenta) {}
 
+// Método para cerrar una cuenta
 void class_cerrar_cuenta::cerrar_cuenta() {
     int numeroCuenta;
     char contrasena[100];
@@ -164,6 +183,8 @@ void class_cerrar_cuenta::cerrar_cuenta() {
     }
 }
 
+//======================================================================
+// Clase para realizar operaciones bancarias
 class OperacionesBancarias {
 public:
     static void depositarDinero(class_abrir_cuenta &cuenta, float monto);
@@ -172,11 +193,13 @@ public:
     static void consultarSaldo(const class_abrir_cuenta &cuenta);
 };
 
+// Método para depositar dinero en una cuenta
 void OperacionesBancarias::depositarDinero(class_abrir_cuenta &cuenta, float monto) {
     cuenta.saldo += monto;
     cout << "Depósito exitoso. Nuevo saldo: $" << cuenta.obtener_saldo() << endl;
 }
 
+// Método para retirar dinero de una cuenta
 void OperacionesBancarias::retirarDinero(class_abrir_cuenta &cuenta, float monto) {
     if (monto <= cuenta.saldo) {
         cuenta.saldo -= monto;
@@ -186,6 +209,7 @@ void OperacionesBancarias::retirarDinero(class_abrir_cuenta &cuenta, float monto
     }
 }
 
+// Método para transferir dinero entre dos cuentas
 void OperacionesBancarias::transferirDinero(class_abrir_cuenta &cuentaOrigen, class_abrir_cuenta &cuentaDestino, float monto) {
     if (monto <= cuentaOrigen.saldo) {
         cuentaOrigen.saldo -= monto;
@@ -196,10 +220,12 @@ void OperacionesBancarias::transferirDinero(class_abrir_cuenta &cuentaOrigen, cl
     }
 }
 
+// Método para consultar el saldo de una cuenta
 void OperacionesBancarias::consultarSaldo(const class_abrir_cuenta &cuenta) {
     cout << "Saldo actual de la cuenta: $" << cuenta.obtener_saldo() << endl;
 }
-
+//======================================================================
+// Clase para gestionar cuentas y menús
 class GestorCuentas {
 public:
     void ejecutarMenu();
@@ -209,6 +235,7 @@ private:
     ServicioCliente servicioCliente;
 };
 
+// Método para ejecutar el menú principal
 void GestorCuentas::ejecutarMenu() {
     int ch;
 
@@ -371,9 +398,12 @@ void GestorCuentas::ejecutarMenu() {
     } while (ch != 0);
 }
 
+//======================================================================
+// Función principal que inicia el programa
 int main() {
     GestorCuentas gestor;
     gestor.ejecutarMenu();
 
     return 0;
 }
+//======================================================================
