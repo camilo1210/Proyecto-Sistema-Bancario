@@ -78,14 +78,16 @@ void class_abrir_cuenta::met_abrir_cuenta() {
     cin.ignore();
     cin.getline(atr_edad, 100);
 
-    cout << "Ingrese el motivo por el cual desea crear su cuenta: ";
-    cin >> atr_motivo;
-
     cout << "Ingrese la contraseña que va a desear usar: ";
     cin.ignore();
     cin.getline(atr_contrasena, 100);
+    
+    cout << "Infgrese el mótivo por el cual desea crear la cuenta: ";
+    cin >> atr_motivo;
 
     cout << "Su cuenta ha sido creada con éxito." << endl;
+    cout << " Su numero de cuenta es : " << atr_numero_cuenta << endl;
+    
 }
 
 // Método para obtener el número de cuenta
@@ -191,6 +193,7 @@ public:
     static void met_retirar_dinero(class_abrir_cuenta &var_cuenta, float var_monto);
     static void met_transferir_dinero(class_abrir_cuenta &var_cuentaOrigen, class_abrir_cuenta &var_cuentaDestino, float var_monto);
     static void met_consultar_saldo(const class_abrir_cuenta &var_cuenta);
+    static void met_mostrar_movimiento();
 };
 
 // Método para depositar dinero en una cuenta
