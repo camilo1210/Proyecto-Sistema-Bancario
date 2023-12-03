@@ -13,7 +13,7 @@
 #include <cstring>
 using namespace std;
 //======================================================================
-// Clase para abrir una cuenta bancaria
+// Clase para mostrar la información del servicio al cliente
 
 class class_servicio_cliente {
 public:
@@ -32,6 +32,7 @@ public:
 
 class class_abrir_cuenta {
 public:
+// Constructor y métodos de la clase abrir_cuenta
     class_abrir_cuenta();
     void met_abrir_cuenta();
     int met_obtener_numero_cuenta() const;
@@ -40,6 +41,7 @@ public:
     void met_cambiar_contrasena();
 
 public:
+ // Atributos de la clase abrir_cuenta
     static int atr_contador_cuentas;
     int atr_numero_cuenta;
     char atr_nombre_completo[100];
@@ -84,7 +86,8 @@ void class_abrir_cuenta::met_abrir_cuenta() {
     
     cout << "Infgrese el mótivo por el cual desea crear la cuenta: ";
     cin >> atr_motivo;
-
+  
+// Mostrar mensaje de éxito y número de cuenta
     cout << "Su cuenta ha sido creada con éxito." << endl;
     cout << " Su numero de cuenta es : " << atr_numero_cuenta << endl;
     
@@ -119,10 +122,12 @@ void class_abrir_cuenta::met_cambiar_contrasena() {
 // Clase para mostrar los datos de una cuenta
 class class_mostrar_cuenta {
 public:
+// Constructor y método de la clase mostrar_cuenta
     class_mostrar_cuenta(const class_abrir_cuenta &var_cuenta);
     void met_mostrar_datos_cuenta() const;
 
 private:
+// Atributo de la clase mostrar_cuenta
     const class_abrir_cuenta &var_cuenta;
 };
 
@@ -139,11 +144,15 @@ void class_mostrar_cuenta::met_mostrar_datos_cuenta() const {
 //======================================================================
 // Clase para cerrar una cuenta
 class class_cerrar_cuenta {
+
 public:
+// Constructor y método de la clase cerrar_cuenta
     class_cerrar_cuenta(const class_abrir_cuenta &var_cuenta);
     void met_cerrar_cuenta();
 
 private:
+// Atributo de la clase cerrar_cuenta
+
     const class_abrir_cuenta &var_cuenta_a_cerrar;
 };
 
@@ -173,7 +182,8 @@ void class_cerrar_cuenta::met_cerrar_cuenta() {
 
     cout << "Ingrese el motivo por el cual quiere cerrar la cuenta: ";
     cin >> atr_motivo;
-
+  
+ // Verificar la información y cerrar la cuenta si es correcta
     if (atr_numero_cuenta == var_cuenta_a_cerrar.met_obtener_numero_cuenta() &&
         strcmp(atr_contrasena, var_cuenta_a_cerrar.met_obtener_contrasena()) == 0 &&
         strcmp(atr_numero_identificacion, var_cuenta_a_cerrar.atr_numero_identificacion) == 0 &&
@@ -189,6 +199,7 @@ void class_cerrar_cuenta::met_cerrar_cuenta() {
 // Clase para realizar operaciones bancarias
 class class_operaciones_bancarias {
 public:
+// Métodos estáticos para realizar operaciones bancarias
     static void met_depositar_dinero(class_abrir_cuenta &var_cuenta, float var_monto);
     static void met_retirar_dinero(class_abrir_cuenta &var_cuenta, float var_monto);
     static void met_transferir_dinero(class_abrir_cuenta &var_cuentaOrigen, class_abrir_cuenta &var_cuentaDestino, float var_monto);
@@ -204,7 +215,8 @@ void class_operaciones_bancarias::met_depositar_dinero(class_abrir_cuenta &var_c
 
 // Método para retirar dinero de una cuenta
 void class_operaciones_bancarias::met_retirar_dinero(class_abrir_cuenta &var_cuenta, float var_monto) {
-    if (var_monto <= var_cuenta.atr_saldo) {
+  // Verificar si hay saldo suficiente y actualizar el saldo
+  if (var_monto <= var_cuenta.atr_saldo) {
         var_cuenta.atr_saldo -= var_monto;
         cout << "Retiro exitoso. Nuevo saldo: $" << var_cuenta.met_obtener_saldo() << endl;
     } else {
@@ -214,7 +226,8 @@ void class_operaciones_bancarias::met_retirar_dinero(class_abrir_cuenta &var_cue
 
 // Método para transferir dinero entre dos cuentas
 void class_operaciones_bancarias::met_transferir_dinero(class_abrir_cuenta &var_cuenta_origen, class_abrir_cuenta &var_cuenta_destino, float var_monto) {
-    if (var_monto <= var_cuenta_origen.atr_saldo) {
+   // Verificar si hay saldo suficiente en la cuenta de origen y actualizar saldos 
+  if (var_monto <= var_cuenta_origen.atr_saldo) {
         var_cuenta_origen.atr_saldo -= var_monto;
         var_cuenta_destino.atr_saldo += var_monto;
         cout << "Transferencia exitosa. Nuevo saldo de la cuenta origen: $" << var_cuenta_origen.met_obtener_saldo() << endl;
@@ -234,6 +247,7 @@ public:
     void met_ejecutar_menu();
 
 private:
+    // Vector que almacena las cuentas creadas y objeto de servicio al cliente
     vector<class_abrir_cuenta> obj_cuentas;
     class_servicio_cliente obj_servicio_cliente;
 };
@@ -243,6 +257,7 @@ void class_gestor_cuentas::met_ejecutar_menu() {
     int var_ch;
 
     do {
+      // Menú principal
         cout << "1) Crea una cuenta\n";
         cout << "2) Mostrar información de la cuenta\n";
         cout << "3) Cerrar una cuenta\n";
@@ -252,14 +267,14 @@ void class_gestor_cuentas::met_ejecutar_menu() {
         cin >> var_ch;
 
         switch (var_ch) {
-        case 1:
+        case 1:// Crear una nueva cuenta y agregarla al vector de cuentas
             {
                 class_abrir_cuenta obj_cuenta;
                 obj_cuenta.met_abrir_cuenta();
                 obj_cuentas.push_back(obj_cuenta);
                 break;
             }
-        case 2:
+        case 2:// Mostrar información de una cuenta específica
             {
                 int atr_numero_cuenta;
                 cout << "Ingrese el número de cuenta: ";
@@ -281,7 +296,7 @@ void class_gestor_cuentas::met_ejecutar_menu() {
 
                 break;
             }
-        case 3:
+        case 3: // Cerrar una cuenta existente
             {
                 int atr_numero_cuenta;
                 cout << "Ingrese el número de cuenta a cerrar: ";
@@ -303,7 +318,7 @@ void class_gestor_cuentas::met_ejecutar_menu() {
 
                 break;
             }
-        case 4:
+        case 4:// Menú de operaciones bancarias
             {
                 int var_opcion_operacion;
                 cout << "1) Depositar Dinero\n";
@@ -324,7 +339,7 @@ void class_gestor_cuentas::met_ejecutar_menu() {
                         var_cuenta_encontrada = true;
 
                         switch (var_opcion_operacion) {
-                        case 1:
+                        case 1:// Depositar dinero
                             {
                                 float var_monto;
                                 cout << "Ingrese el monto a depositar: $";
@@ -332,7 +347,7 @@ void class_gestor_cuentas::met_ejecutar_menu() {
                                 class_operaciones_bancarias::met_depositar_dinero(obj_cuenta, var_monto);
                                 break;
                             }
-                        case 2:
+                        case 2:// Retirar dinero
                             {
                                 float var_monto;
                                 cout << "Ingrese el monto a retirar: $";
@@ -340,7 +355,7 @@ void class_gestor_cuentas::met_ejecutar_menu() {
                                 class_operaciones_bancarias::met_retirar_dinero(obj_cuenta, var_monto);
                                 break;
                             }
-                        case 3:
+                        case 3:// Transferir a una cuenta
                             {
                                 int var_numero_cuenta_destino;
                                 cout << "Ingrese el número de cuenta destino: ";
@@ -364,14 +379,13 @@ void class_gestor_cuentas::met_ejecutar_menu() {
 
                                 break;
                             }
-                        case 4:
+                        case 4:// consultar saldo de la cuenta
                             class_operaciones_bancarias::met_consultar_saldo(obj_cuenta);
                             break;
-                        case 5:
+                        case 5://cambiar contraseña
                             obj_cuenta.met_cambiar_contrasena();
                             break;
-                        case 0:
-                            // No se realiza ninguna operación, simplemente se vuelve al menú principal
+                        case 0: // No se realiza ninguna operación,se vuelve al menú principal
                             break;
                         default:
                             cout << "Opción no válida.\n";
@@ -388,10 +402,10 @@ void class_gestor_cuentas::met_ejecutar_menu() {
 
                 break;
             }
-        case 5:
+        case 5://Mostrar informacion del servicio al cliente
             obj_servicio_cliente.met_mostrar_informacion_banco();
             break;
-        case 0:
+        case 0://salir del sistema
             cout << "Saliendo del programa...\n";
             break;
         default:
