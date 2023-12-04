@@ -190,6 +190,9 @@ void class_cerrar_cuenta::met_cerrar_cuenta() {
         strcmp(atr_nombre, var_cuenta_a_cerrar.atr_nombre_completo) == 0 &&
         atr_motivo == var_cuenta_a_cerrar.atr_motivo) {
         cout << "Cuenta cerrada exitosamente.\n";
+        // Mostrar mensaje de éxito y número de cuenta
+        cout << "Su cuenta ha sido creada con éxito." << endl;
+        cout << "Su número de cuenta es: " << atr_numero_cuenta << endl;
     } else {
         cout << "Error al cerrar la cuenta. La información ingresada no coincide con la cuenta.\n";
     }
