@@ -39,6 +39,14 @@ public:
     const char* met_obtener_contrasena() const;
     float met_obtener_saldo() const;
     void met_cambiar_contrasena();
+    vector<pair<string, float>> vec_movimientos;
+    void met_mostrar_movimientos() const {
+        cout << "----- Movimientos Bancarios -----\n";
+        for (const auto &movimiento : vec_movimientos) {
+            cout << movimiento.first << ": $" << movimiento.second << endl;
+        }
+        cout << "----------------------------------\n";
+    }
 
 public:
  // Atributos de la clase abrir_cuenta
@@ -203,6 +211,7 @@ void class_cerrar_cuenta::met_cerrar_cuenta() {
 class class_operaciones_bancarias {
 public:
 // Métodos estáticos para realizar operaciones bancarias
+
     static void met_depositar_dinero(class_abrir_cuenta &var_cuenta, float var_monto);
     static void met_retirar_dinero(class_abrir_cuenta &var_cuenta, float var_monto);
     static void met_transferir_dinero(class_abrir_cuenta &var_cuentaOrigen, class_abrir_cuenta &var_cuentaDestino, float var_monto);
@@ -213,14 +222,16 @@ public:
 // Método para depositar dinero en una cuenta
 void class_operaciones_bancarias::met_depositar_dinero(class_abrir_cuenta &var_cuenta, float var_monto) {
     var_cuenta.atr_saldo += var_monto;
+    var_cuenta.vec_movimientos.push_back({"Depósito", var_monto});  // Registrar movimiento
     cout << "Depósito exitoso. Nuevo saldo: $" << var_cuenta.met_obtener_saldo() << endl;
 }
 
 // Método para retirar dinero de una cuenta
 void class_operaciones_bancarias::met_retirar_dinero(class_abrir_cuenta &var_cuenta, float var_monto) {
   // Verificar si hay saldo suficiente y actualizar el saldo
-  if (var_monto <= var_cuenta.atr_saldo) {
+    if (var_monto <= var_cuenta.atr_saldo) {
         var_cuenta.atr_saldo -= var_monto;
+        var_cuenta.vec_movimientos.push_back({"Retiro", var_monto});  // Registrar movimiento
         cout << "Retiro exitoso. Nuevo saldo: $" << var_cuenta.met_obtener_saldo() << endl;
     } else {
         cout << "Saldo insuficiente para realizar el retiro.\n";
@@ -329,6 +340,7 @@ void class_gestor_cuentas::met_ejecutar_menu() {
                 cout << "3) Transferir Dinero\n";
                 cout << "4) Consultar Saldo\n";
                 cout << "5) Cambiar Contraseña\n";
+                cout << "6) Mostrar movimientos bancarios\n";
                 cout << "0) Volver al Menú Principal\n";
                 cin >> var_opcion_operacion;
 
@@ -387,6 +399,9 @@ void class_gestor_cuentas::met_ejecutar_menu() {
                             break;
                         case 5://cambiar contraseña
                             obj_cuenta.met_cambiar_contrasena();
+                            break;
+                        case 6://Movimientos bancarios
+                        obj_cuenta.met_mostrar_movimientos();
                             break;
                         case 0: // No se realiza ninguna operación,se vuelve al menú principal
                             break;
